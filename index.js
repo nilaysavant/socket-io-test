@@ -3,12 +3,13 @@
  * 
  */
 
-const express = require('express')
 const path = require('path')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const axios = require("axios");
-
+const app = require('express')();
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
 
 /** load env vars */
 require("dotenv").config()
@@ -25,9 +26,6 @@ if (DB || DB === false) {
 
 /** Server Port Variable */
 const PORT = process.env.PORT || 3000
-
-/** init express app */
-const app = express()
 
 /** a logger for express */
 app.use(morgan('dev'))
@@ -113,9 +111,16 @@ const main = async function () {
   })
 
   /**
+   * check for connection
+   */
+  io.on('connection', (socket) => {
+    console.log('a user connected');
+  });
+  
+  /**
    * Listen for requests on port
    */
-  app.listen(PORT, () => {
+  http.listen(PORT, () => {
     console.log('Serving on port:', PORT)
   })
 }
