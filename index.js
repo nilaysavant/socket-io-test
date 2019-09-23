@@ -6,10 +6,11 @@
 const path = require('path')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
-const axios = require("axios");
-const app = require('express')();
-const http = require('http').createServer(app);
-const io = require('socket.io')(http);
+const axios = require("axios")
+const express = require('express')
+const app = express()
+const http = require('http').createServer(app)
+const io = require('socket.io')(http)
 
 /** load env vars */
 require("dotenv").config()
@@ -31,7 +32,7 @@ const PORT = process.env.PORT || 3000
 app.use(morgan('dev'))
 
 /** Custom Variables START -----------------------------------------------------*/
-
+let COUNT = 0
 /** Custom Variables END -----------------------------------------------------*/
 
 /** to parse the body of post requests -> bodyParser : */
@@ -115,14 +116,20 @@ const main = async function () {
    */
   io.on('connection', (socket) => {
     console.log('a user connected');
+    socket.on('event', (data, send) => {
+      console.log({ data })
+      COUNT += 1
+      send(COUNT)
+    });
   });
-  
+
   /**
    * Listen for requests on port
    */
   http.listen(PORT, () => {
     console.log('Serving on port:', PORT)
   })
+
 }
 /** MAIN FUNCTION ENDS ----------------------------------------------------------- */
 
