@@ -1,3 +1,2 @@
-# Node/ExpressJS Jsonstore DB Boilerplate
+# A basic up counter with Socket.IO
 
-## Boilerplate code for Node/ExpressJS and Jsonstore DB
